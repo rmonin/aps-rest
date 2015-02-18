@@ -53,7 +53,9 @@ public class PostgresHelper {
 		vals.setLength(vals.length()-1);
 		String query = String.format("INSERT INTO %s (%s) VALUES (%s)", table,
 				columns.toString(), vals.toString());
-		
+		System.out.print(query);
 		return this.conn.createStatement().executeUpdate(query);
 	}
+	
+	
 }

@@ -1,5 +1,7 @@
 package aps;
 
+import java.sql.SQLException;
+
 import twitter4j.TwitterException;
 
 public class CollectTweets extends Thread {
@@ -11,15 +13,15 @@ public class CollectTweets extends Thread {
 	
 	public void run () {   
 		Twitter twitter = new Twitter();
+//		try {
+//			twitter.getTimeline();
+//		} catch (TwitterException | SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		try {
-			twitter.getTimeline();
-		} catch (TwitterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			twitter.getFriendsAndFollowers();
-		} catch (TwitterException e) {
+			twitter.main();
+		} catch (TwitterException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

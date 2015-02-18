@@ -16,7 +16,7 @@ public class Facebook {
 		// Get an access token from: 
 		// https://developers.facebook.com/tools/explorer
 		// Copy and paste it below.
-		private String accessTokenString = "CAACEdEose0cBAGANj3MOwiFPDG2kZCfivklQr6SKcQyPoWFeBIdcTiu00ZBdsoexJxCngxZAzDZA5TdbYUgyRbY2p16gZAwOJsBBqcvvAwCTNOHXbmWezxjuGTt5eDOthoWo7pAg26zWJXi9E9msr19TZBECLBpkDw8TTvWiPpXaRNNdQBU42O0Y2AstZAtXoUHVWnfMzuaqQWpIeomkPG4YnuLy0aATUcZD";
+		private String accessTokenString = "CAACEdEose0cBALLQMrGjk44OYPnx6TdZAo2MqWLn0YUGlmK8N54f0ZBDOfZCb0WIytomNZBZAQXZCPMc2qrtV8dk2ZCE0MvlIAsLMUCE8ZAb6xQQwePlPsHML0OowPZC5g37ZCxd1DmwqJ5qXjiiRhiwniq67VZBTjcgZBxU7QfvOaQ8NZByihTzKDSCbTSYu6YA7j4BA9texv0FZAFn5ngTDCRNq4MgbblkEyFsAZD";
 		
 		public Facebook () {
 			// Generate facebook instance.
