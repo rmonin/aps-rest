@@ -57,5 +57,4 @@ public class PostgresHelper {
 		return this.conn.createStatement().executeUpdate(query);
 	}
 	
-	
 }

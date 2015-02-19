@@ -2,14 +2,15 @@ package aps;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import twitter4j.PagableResponseList;
+import twitter4j.RateLimitStatus;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -58,17 +59,7 @@ public class Twitter {
 	
 	
 	
-	public void getTimeline () throws TwitterException, SQLException {
-		
-		id_twitter = twitter.getId();
-		User user = twitter.showUser(id_twitter);	
-		List<Status> timeline = getTimeline(user);
-		// Store posts in Database
-		insertTwitterStatuses(timeline);
-	}
-	
-	
-	public void main () throws TwitterException, SQLException {
+	public void collectTweets () throws TwitterException, SQLException {
 		
 		id_twitter = twitter.getId();
 		User user = twitter.showUser(id_twitter);
@@ -99,6 +90,47 @@ public class Twitter {
 		}
 	}
 	
+	
+	public void classifyTweets () throws TwitterException, SQLException {
+		
+		int rate, anorexia, depression, harassment, uncategorized;
+		List<Map<String, Object>> listRates = selectTwitterRates();
+		List<Long> listeStatusesId = selectTwitterStatusesID();
+		
+		if(!listRates.isEmpty()) {
+			for (int j=0;j<listRates.size();j++){
+				Map<String, Object> map = listRates.get(j);
+				long id = (long) map.get("twitter_status_id");
+				if(!listeStatusesId.contains(id)){
+					
+					// Give random values
+					Random rand = new Random();
+					rate = rand.nextInt(100);
+					anorexia = rand.nextInt(100);
+					depression = rand.nextInt(100);
+					harassment = rand.nextInt(100);
+					uncategorized = rand.nextInt(100);
+					
+					this.insertTwitterRate(id, rate, anorexia, depression, harassment, uncategorized);
+				}
+			}
+		}
+		else {
+			for (int i=0;i<listeStatusesId.size();i++){
+				long id = listeStatusesId.get(i);
+				
+				// Give random values
+				Random rand = new Random();
+				rate = rand.nextInt(100);
+				anorexia = rand.nextInt(100);
+				depression = rand.nextInt(100);
+				harassment = rand.nextInt(100);
+				uncategorized = rand.nextInt(100);
+				
+				this.insertTwitterRate(id, rate, anorexia, depression, harassment, uncategorized);
+			}
+		}
+	}
 	
 	public List<Status> getTimeline (User user) throws TwitterException {
 		
@@ -158,7 +190,7 @@ public class Twitter {
 	
 	
 	public void insertTwitterStatuses(List<Status> timeline) throws SQLException {
-		List<Long> idStatuses = selectTwitterStatuses();
+		List<Long> idStatuses = selectTwitterStatusesID();
 		
 		for (int i=0;i<timeline.size();i++){
 			Status post = timeline.get(i);
@@ -182,6 +214,29 @@ public class Twitter {
 					System.out.println("Record added");
 				}
 			}
+		}
+	}
+	
+	public void insertTwitterRate(long id, int rate, int anorexia, int depression, int harassment, int uncategorized) throws SQLException {
+		
+		java.util.Date date= new java.util.Date();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		//map.put("id", "");
+		map.put("twitter_status_id", id);
+		map.put("facebook_post_id", null);
+		map.put("facebook_status_id", null);
+		map.put("facebook_link_id", null);
+		map.put("facebook_comment_id", null);
+		map.put("rate", rate);
+		map.put("anorexia", anorexia);
+		map.put("depression", depression);
+		map.put("harassment", harassment);
+		map.put("uncategorized", uncategorized);
+		map.put("created", format.format(date));
+		map.put("modified", null);
+		if (client.insert("rates", map) == 1) {
+			System.out.println("Record added");
 		}
 	}
 	
@@ -248,11 +303,34 @@ public class Twitter {
 		return liste;
 	}
 	
-	public List<Long> selectTwitterStatuses() throws SQLException {
+	public List<Long> selectTwitterStatusesID() throws SQLException {
 		ResultSet rs = client.execQuery("SELECT id FROM twitter_statuses");
 		List<Long> liste = new ArrayList<Long>();
 		while(rs.next()) {
 			liste.add(rs.getLong(1));
+		}
+		return liste;
+	}
+	
+	public List<Map<String, Object>> selectTwitterStatuses() throws SQLException {
+		ResultSet rs = client.execQuery("SELECT * FROM twitter_statuses");
+		List<Map<String, Object>> liste = new ArrayList<Map<String, Object>>();
+		while(rs.next()) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", rs.getLong(1));
+			map.put("user_id", rs.getLong(2));
+			map.put("created_at", rs.getTimestamp(3));
+			map.put("in_reply_to_user_id", rs.getLong(4));
+			map.put("retweet_count", rs.getInt(5));
+			map.put("in_reply_to_status_id", rs.getLong(6));
+			map.put("text_", rs.getString(7));
+			map.put("in_reply_to_screen_name", rs.getString(8));
+			map.put("place", rs.getString(9));
+			map.put("source", rs.getString(10));
+			map.put("full_content",rs.getString(11));
+			map.put("created", rs.getTimestamp(12));
+			map.put("modified", rs.getTimestamp(13));
+			liste.add(map);
 		}
 		return liste;
 	}
@@ -281,6 +359,43 @@ public class Twitter {
 			}
 		}
 		return res;
+	}
+	
+	public List<Map<String, Object>> selectTwitterRates() throws SQLException {
+		ResultSet rs = client.execQuery("SELECT * FROM rates");
+		List<Map<String, Object>> liste = new ArrayList<Map<String, Object>>();
+		while(rs.next()) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", rs.getLong(1));
+			map.put("twitter_status_id", rs.getLong(2));
+			map.put("facebook_post_id", rs.getLong(3));
+			map.put("facebook_status_id", rs.getLong(4));
+			map.put("facebook_link_id", rs.getLong(5));
+			map.put("facebook_comment_id", rs.getLong(6));
+			map.put("rate", rs.getInt(7));
+			map.put("anorexia", rs.getInt(8));
+			map.put("depression", rs.getInt(9));
+			map.put("harassment", rs.getInt(10));
+			map.put("uncategorized", rs.getInt(11));
+			map.put("created", rs.getTimestamp(12));
+			map.put("modified", rs.getTimestamp(13));
+			liste.add(map);
+		}
+		return liste;
+	}
+	
+	public long rateLimit() throws TwitterException {
+		Map<String ,RateLimitStatus> rateLimitStatus = twitter.getRateLimitStatus();
+		int hitRemaining=0;
+		long timeRemaining=0;
+		for (String endpoint : rateLimitStatus.keySet()) {
+		    RateLimitStatus status = rateLimitStatus.get(endpoint);
+		    hitRemaining=status.getRemaining();
+		    if(hitRemaining==0){
+		    	timeRemaining=status.getSecondsUntilReset()*1000;
+		    }
+		}
+		return(timeRemaining);
 	}
 	
 	
