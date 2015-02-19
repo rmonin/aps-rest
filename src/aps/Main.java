@@ -7,7 +7,7 @@ public class Main {
 	 * APS Server
 	 * 
 	 * Collect Facebook and Twitter informations
-	 * Store in DataBase  
+	 * Store users, informations, posts and statuses in DataBase  
 	 *
 	 */
 	    

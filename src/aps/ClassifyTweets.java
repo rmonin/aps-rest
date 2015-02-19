@@ -12,16 +12,22 @@ public class ClassifyTweets extends Thread{
 	
 	
 	public void run () {   
-		// Traiter les tweets ici
 		
 		Twitter twitter = new Twitter();
+		System.out.println("ClassifyTweets active");
+		
 		try {
 			
-			twitter.classifyTweets();	
+			twitter.classifyTweets();
+			// Pause du thread pendant 5 heures
+			System.out.println("ClassifyTweets sleeping");
+			ClassifyTweets.sleep(18000000);
 			
-		} catch (TwitterException | SQLException e) {
+		} catch (TwitterException | SQLException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}	
+		
+		this.run();
 	}
 }

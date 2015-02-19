@@ -98,6 +98,8 @@ public class Twitter {
 		List<Long> listeStatusesId = selectTwitterStatusesID();
 		
 		if(!listRates.isEmpty()) {
+			
+			// Check if there are statuses in database to classify
 			for (int j=0;j<listRates.size();j++){
 				Map<String, Object> map = listRates.get(j);
 				long id = (long) map.get("twitter_status_id");
@@ -137,7 +139,6 @@ public class Twitter {
 		List<Status> timeline = twitter.getUserTimeline(user.getId());
 		return(timeline);
 	}
-	
 	
 	public PagableResponseList<User> getFriends (User user) throws TwitterException{
 		
@@ -271,8 +272,7 @@ public class Twitter {
 		
 		java.util.Date date= new java.util.Date();
 		List<Map<String, Object>> relationships = selectTwitterRelationships();
-		
-		
+			
 		for (int i=0;i<list.size();i++){
 			User user = list.get(i);
 			insertTwitterUser(user);
@@ -292,7 +292,6 @@ public class Twitter {
 			}
 		}
 	}
-	
 	
 	public List<Long> selectTwitterUsers() throws SQLException {
 		ResultSet rs = client.execQuery("SELECT id FROM twitter_users");
@@ -397,6 +396,5 @@ public class Twitter {
 		}
 		return(timeRemaining);
 	}
-	
 	
 }
