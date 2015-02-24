@@ -58,7 +58,6 @@ public class Twitter {
 	}
 	
 	
-	
 	public void collectTweets () throws TwitterException, SQLException {
 		
 		id_twitter = twitter.getId();
@@ -77,13 +76,13 @@ public class Twitter {
 		
 		for (int i=0;i<followers.size();i++){
 			User follower = followers.get(i);
+			// Get timeline for each follower
 			List<Status> timeline = getTimeline(follower);
 			// Store posts in Database
 			insertTwitterStatuses(timeline);
 
 //			PagableResponseList<User> friendsOfFollowers = getFriends(follower);
 //			insertTwitterFriendUsers(friendsOfFollowers);
-//
 //			PagableResponseList<User> followerOfFollowers = getFollowers(follower);
 //			insertTwitterFollowingUsers(followerOfFollowers);
 
@@ -157,6 +156,9 @@ public class Twitter {
 		return(followers);
 	}
 	
+	
+					/*  SELECT METHODS  */
+					  /*		      */
 	
 	public void insertTwitterUser(User user) throws SQLException {
 		List<Long> idUsers = selectTwitterUsers();
@@ -301,6 +303,9 @@ public class Twitter {
 		}
 		return liste;
 	}
+	
+					/*  SELECT METHODS  */
+					  /*		      */
 	
 	public List<Long> selectTwitterStatusesID() throws SQLException {
 		ResultSet rs = client.execQuery("SELECT id FROM twitter_statuses");

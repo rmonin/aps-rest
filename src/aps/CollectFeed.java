@@ -1,5 +1,7 @@
 package aps;
 
+import java.sql.SQLException;
+
 import facebook4j.FacebookException;
 
 public class CollectFeed extends Thread{
@@ -11,17 +13,16 @@ public class CollectFeed extends Thread{
 	
 	public void run () {   
 		Facebook facebook = new Facebook();
+		System.out.println("CollectFeed active");
+		
 		try {
-			facebook.getFriends();
-		} catch (FacebookException e) {
+			facebook.collectFeed();
+			// Wait 2 minutes before next call
+			CollectFeed.sleep(120000);
+		} catch (FacebookException | SQLException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			facebook.getPosts();
-		} catch (FacebookException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.run();
 	}
 }

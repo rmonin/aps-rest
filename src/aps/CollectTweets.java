@@ -1,7 +1,6 @@
 package aps;
 
 import java.sql.SQLException;
-
 import twitter4j.TwitterException;
 
 public class CollectTweets extends Thread {
@@ -20,6 +19,7 @@ public class CollectTweets extends Thread {
 			timeRemaining = twitter.rateLimit();
 			if(timeRemaining==0){
 				twitter.collectTweets();
+				// Wait 1 minute before next call
 				CollectTweets.sleep(60000);
 			}
 			else {

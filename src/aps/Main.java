@@ -13,7 +13,7 @@ public class Main {
 	    
 	public static void main(String[] args) {
 		
-		//CollectFeed collectFeed = new CollectFeed();
+		CollectFeed collectFeed = new CollectFeed();
 		CollectTweets collectTweets = new CollectTweets();
 		ClassifyTweets classifyTweets = new ClassifyTweets();
 	}
