@@ -16,6 +16,7 @@ public class Main {
 		CollectFeed collectFeed = new CollectFeed();
 		CollectTweets collectTweets = new CollectTweets();
 		ClassifyTweets classifyTweets = new ClassifyTweets();
+		ClassifyFeed classifyFeed = new ClassifyFeed();
 	}
 
 }

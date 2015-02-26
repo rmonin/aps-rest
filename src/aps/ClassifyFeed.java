@@ -14,9 +14,9 @@ public class ClassifyFeed extends Thread{
 			
 			try {
 				
-				facebook.classifyTweets();
+				facebook.classifyFeed();
 				// Pause du thread pendant 5 heures
-				System.out.println("ClassifyTweets sleeping");
+				System.out.println("ClassifyFeed sleeping");
 				ClassifyTweets.sleep(18000000);
 				
 			} catch (InterruptedException e) {

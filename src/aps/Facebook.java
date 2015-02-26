@@ -26,7 +26,7 @@ public class Facebook {
 		// Get an access token from: 
 		// https://developers.facebook.com/tools/explorer
 		// Copy and paste it below.
-		private String accessTokenString = "CAACEdEose0cBAMqDUhSyIe2HSfkPyoTagoL3fyvZBS629yrbrjZAZCZBLuhLv5BO4kujcIdXzkZBAffaZAiPV71sPMPGuH4ZAq4mDZAxfGMdA2RhE08EfXCBoithq1YbUQrz9zRW1CCVoZCu8ROdqw0KWY7oD6gy9rZBgHROZCEfFpZB55n6D0BpwwsXnt0LA69Qy24DtOqbQ79ISEnB4bUqc4ZBibad5GA96f5UZD";
+		private String accessTokenString = "CAACEdEose0cBAPVoYKQsi86ZC8xg4TZA3rnYaPLDS6g3T5d8EzTFYtwB8WdXHWz3z2DZBzyQmYlRoet1M6kfgqth0Rn1S28aOuB9Ai4Ik0DaLewKR96USwA71xeZCO3kmRXZAtHWAsMQFZClwFhA9bowCT35zS8Cn4YwZBCmXQXfdwp5vQ4vLRt55gAM0NZAPZAGiwJaUEZACXiw7dZALt2GaHZA";
 		private PostgresHelper client;
 		private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
@@ -124,8 +124,18 @@ public class Facebook {
 				map.put("howntown", user.getHometown());
 				map.put("is_verified", null);
 				map.put("last_name", user.getLastName());
-				map.put("link", user.getLink());
-				map.put("locale", user.getLocale());
+				if (user.getLink()!=null){
+					map.put("link", user.getLink().getFile().replace(","," "));
+				}
+				else {
+					map.put("link", null);
+				}
+				if (user.getLocale()!=null){
+					map.put("locale", user.getLocale().getCountry().replace(","," "));
+				}
+				else {
+					map.put("locale", null);
+				}
 				map.put("location", user.getLocation());
 				map.put("middle_name", user.getMiddleName());
 				map.put("name", user.getName());
@@ -222,7 +232,7 @@ public class Facebook {
 				map.put("modified", null);
 				if (client.insert("facebook_links", map) == 1) {
 					System.out.println("Record added");
-					insertFacebookFeed(link.getFrom().getId(),link.getId(),null,null);
+					//insertFacebookFeed(link.getFrom().getId(),link.getId(),null,null);
 				}
 			}
 		}
@@ -413,7 +423,7 @@ public class Facebook {
 			return liste;
 		}
 		
-		public void classifyTweets() {
+		public void classifyFeed() {
 			System.out.println("Feed classification OK");
 		}
 		

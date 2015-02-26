@@ -18,6 +18,7 @@ public class CollectFeed extends Thread{
 		try {
 			facebook.collectFeed();
 			// Wait 2 minutes before next call
+			System.out.println("CollectFeed sleeping");
 			CollectFeed.sleep(120000);
 		} catch (FacebookException | SQLException | InterruptedException e) {
 			// TODO Auto-generated catch block
